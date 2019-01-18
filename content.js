@@ -1,8 +1,24 @@
 var movieData = null;
 const apiKey = "7dbc1175";
 
-getMovieTitle();
-var test = callApi();
+var parent = document.querySelector(".swatchElement.selected");
+var isMovie = false;
+
+if(parent) {
+  var isBluRay = parent.querySelector('.a-button-text').innerText.search("Blu-ray") !== -1;
+  var isDVD = parent.querySelector('.a-button-text').innerText.search("DVD") !== -1;
+  var is4k = parent.querySelector('.a-button-text').innerText.search("4K") !== -1;
+  isMovie = isBluRay || isDVD || is4k;
+}
+console.log(isMovie)
+
+if (isMovie) {
+  getMovieTitle();
+  callApi();
+} else {
+  console.log('Not a movie');
+}
+
 
 function getMovieTitle() {
   let movieTitle = document.querySelector("#productTitle").textContent;
