@@ -49,6 +49,7 @@ function callApi() {
 }
 
 function getRatings(movieData) {
+  console.log(movieData)
   const ratings = movieData.Ratings;
   const rottenTomatoes = ratings.filter(rating => {
     return rating.Source == "Rotten Tomatoes";
@@ -56,21 +57,31 @@ function getRatings(movieData) {
   const imdbRating = ratings.filter(rating => {
     return rating.Source == "Internet Movie Database";
   });
-  if (rottenTomatoes) {
+
+  if (rottenTomatoes.length > 0) {
     displayRTRating(rottenTomatoes);
   }
-  if (imdbRating) {
+  if (imdbRating.length > 0) {
     displayIMDbRating(imdbRating);
   }
 }
 
 function displayRTRating(rottenTomatoesRating) {
   const rtRatingNode = document.createElement("DIV");
+  const rtRatingClassNode = document.createElement("SPAN");
+  rtRatingClassNode.classList.add('rotten-rating')
   const textnode = document.createTextNode(rottenTomatoesRating[0].Value);
+  rtRatingNode.appendChild(rtRatingClassNode);
   rtRatingNode.appendChild(textnode);
   document.querySelector("#averageCustomerReviews").appendChild(rtRatingNode);
 }
 
 function displayIMDbRating(imdbRating) {
-  document.querySelector("#averageCustomerReviews").append(imdbRating[0].Value);
+  const imdbRatingNode = document.createElement("DIV");
+  const imdbRatingClassNode = document.createElement("SPAN");
+  imdbRatingClassNode.classList.add('imdb-rating')
+  const textnode = document.createTextNode(imdbRating[0].Value);
+  imdbRatingNode.appendChild(imdbRatingClassNode);
+  imdbRatingNode.appendChild(textnode);
+  document.querySelector("#averageCustomerReviews").append(imdbRatingNode);
 }
