@@ -69,19 +69,33 @@ function getRatings(movieData) {
 function displayRTRating(rottenTomatoesRating) {
   const rtRatingNode = document.createElement("DIV");
   const rtRatingClassNode = document.createElement("SPAN");
-  rtRatingClassNode.classList.add('rotten-rating')
   const textnode = document.createTextNode(rottenTomatoesRating[0].Value);
+  let rottenStatus = 'fresh';
+  const ratingNumber = rottenTomatoesRating[0].Value.slice(0, -1);
+  
+  console.log(ratingNumber)
+  if(ratingNumber < "60") {
+
+    rottenStatus = 'rotten';
+  }
+
+  rtRatingClassNode.classList.add('rating-other-source',`rt-${rottenStatus}-rating`)
+
   rtRatingNode.appendChild(rtRatingClassNode);
   rtRatingNode.appendChild(textnode);
+
   document.querySelector("#averageCustomerReviews").appendChild(rtRatingNode);
 }
 
 function displayIMDbRating(imdbRating) {
   const imdbRatingNode = document.createElement("DIV");
   const imdbRatingClassNode = document.createElement("SPAN");
-  imdbRatingClassNode.classList.add('imdb-rating')
   const textnode = document.createTextNode(imdbRating[0].Value);
+
+  imdbRatingClassNode.classList.add('rating-other-source','imdb-rating')
+
   imdbRatingNode.appendChild(imdbRatingClassNode);
   imdbRatingNode.appendChild(textnode);
+
   document.querySelector("#averageCustomerReviews").append(imdbRatingNode);
 }
