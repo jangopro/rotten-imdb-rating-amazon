@@ -84,7 +84,7 @@ function displayRTRating(rottenTomatoesRating) {
   rtRatingNode.appendChild(rtRatingClassNode);
   rtRatingNode.appendChild(textnode);
 
-  document.querySelector("#averageCustomerReviews").appendChild(rtRatingNode);
+  appendNewRatings(rtRatingNode);
 }
 
 function displayIMDbRating(imdbRating) {
@@ -97,5 +97,14 @@ function displayIMDbRating(imdbRating) {
   imdbRatingNode.appendChild(imdbRatingClassNode);
   imdbRatingNode.appendChild(textnode);
 
-  document.querySelector("#averageCustomerReviews").append(imdbRatingNode);
+  appendNewRatings(imdbRatingNode);
+}
+
+function appendNewRatings(node) {
+  const selectionExists = document.querySelector('#averageCustomerReviews') !== null;
+  if(selectionExists) {
+    document.querySelector("#averageCustomerReviews").append(node);
+  } else {
+    document.querySelector("#bylineInfo_feature_div").append(node);
+  }
 }
