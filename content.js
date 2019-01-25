@@ -1,24 +1,20 @@
-var movieData = null;
 const apiKey = "7dbc1175";
+let movieData = null;
 
-var parent = document.querySelector(".swatchElement.selected");
-var isMovie = false;
+const parent = document.querySelector(".swatchElement.selected");
+let isMovie = false;
 
 if(parent) {
-  var isBluRay = parent.querySelector('.a-button-text').innerText.search("Blu-ray") !== -1;
-  var isDVD = parent.querySelector('.a-button-text').innerText.search("DVD") !== -1;
-  var is4k = parent.querySelector('.a-button-text').innerText.search("4K") !== -1;
+  let isBluRay = parent.querySelector('.a-button-text').innerText.search("Blu-ray") !== -1;
+  let isDVD = parent.querySelector('.a-button-text').innerText.search("DVD") !== -1;
+  let is4k = parent.querySelector('.a-button-text').innerText.search("4K") !== -1;
   isMovie = isBluRay || isDVD || is4k;
 }
-console.log(isMovie)
 
 if (isMovie) {
   getMovieTitle();
   callApi();
-} else {
-  console.log('Not a movie');
 }
-
 
 function getMovieTitle() {
   let movieTitle = document.querySelector("#productTitle").textContent;
@@ -41,7 +37,9 @@ function callApi() {
       return rawMovieData.json();
     })
     .then(movieData => {
-      getRatings(movieData);
+      if(!movieData.Error) {
+        getRatings(movieData);
+      }
     })
     .catch(err => {
       console.log(err);
@@ -71,23 +69,19 @@ function getRatings(movieData) {
 function displayRTRating(rottenTomatoesRating, differentLayout) {
   const rtRatingNode = document.createElement("DIV");
   const rtRatingClassNode = document.createElement("SPAN");
-  const textnode = document.createTextNode(rottenTomatoesRating[0].Value);
-  let rottenStatus = 'fresh';
+  const textNode = document.createTextNode(rottenTomatoesRating[0].Value);
   const ratingNumber = rottenTomatoesRating[0].Value.slice(0, -1);
   
-  console.log(ratingNumber)
+  let rottenStatus = 'fresh';
 
   if(parseInt(ratingNumber) < 60) {
-
     rottenStatus = 'rotten';
   }
 
   rtRatingClassNode.classList.add('rating-other-source',`rt-${rottenStatus}-rating`);
 
-
-
   rtRatingNode.appendChild(rtRatingClassNode);
-  rtRatingNode.appendChild(textnode);
+  rtRatingNode.appendChild(textNode);
 
   if(differentLayout) {
     rtRatingNode.classList.add('rating-rt-with-imdb');
@@ -99,16 +93,22 @@ function displayRTRating(rottenTomatoesRating, differentLayout) {
 }
 
 function displayIMDbRating(imdbRating) {
-  const imdbRatingNode = document.createElement("DIV");
-  const imdbRatingClassNode = document.createElement("SPAN");
-  const textnode = document.createTextNode(imdbRating[0].Value);
-
-  imdbRatingClassNode.classList.add('rating-other-source','imdb-rating')
-
-  imdbRatingNode.appendChild(imdbRatingClassNode);
-  imdbRatingNode.appendChild(textnode);
+  const imdbRatingNode = createNode(imdbRating[0].Value, 'imdb-rating');
 
   appendNewRatings(imdbRatingNode);
+}
+
+function createNode(rating, className) {
+  const divNode = document.createElement("DIV");
+  const spanNode = document.createElement("SPAN");
+  const ratingText = document.createTextNode(rating);
+
+  spanNode.classList.add('rating-other-source', className)
+
+  divNode.appendChild(spanNode);
+  divNode.appendChild(ratingText);
+
+  return divNode;
 }
 
 function appendNewRatings(node) {
