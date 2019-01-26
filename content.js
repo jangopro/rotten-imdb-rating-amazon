@@ -1,19 +1,24 @@
 const apiKey = "7dbc1175";
-let movieData = null;
+const typeMediaSelectedSelector = document.querySelector(".swatchElement.selected");
 
-const parent = document.querySelector(".swatchElement.selected");
+let movieData = null;
 let isMovie = false;
 
-if(parent) {
-  let isBluRay = parent.querySelector('.a-button-text').innerText.search("Blu-ray") !== -1;
-  let isDVD = parent.querySelector('.a-button-text').innerText.search("DVD") !== -1;
-  let is4k = parent.querySelector('.a-button-text').innerText.search("4K") !== -1;
-  isMovie = isBluRay || isDVD || is4k;
+if (parent) {
+  const textMediaSelected = typeMediaSelectedSelector.querySelector('.a-button-text').innerText;
+  isMovie = checkIfMovieMedia(textMediaSelected);
 }
 
 if (isMovie) {
   getMovieTitle();
   callApi();
+}
+
+function checkIfMovieMedia(textMediaSelected) {
+  const isBluRay = textMediaSelected.search("Blu-ray") !== -1;
+  const isDVD = textMediaSelected.search("DVD") !== -1;
+  const is4k = textMediaSelected.search("4K") !== -1;
+  return isBluRay || isDVD || is4k;
 }
 
 function getMovieTitle() {
@@ -30,7 +35,6 @@ function getMovieTitle() {
 
 function callApi() {
   const movieTitle = getMovieTitle();
-  console.log(movieTitle);
 
   fetch(`https://www.omdbapi.com/?t=${movieTitle}&apikey=${apiKey}`)
     .then(rawMovieData => {
@@ -47,7 +51,6 @@ function callApi() {
 }
 
 function getRatings(movieData) {
-  console.log(movieData)
   const ratings = movieData.Ratings;
   const imdbAlreadyExistingSelector = document.querySelector('.imdb-rating');
   const rottenTomatoes = ratings.filter(rating => {
@@ -67,21 +70,14 @@ function getRatings(movieData) {
 }
 
 function displayRTRating(rottenTomatoesRating, differentLayout) {
-  const rtRatingNode = document.createElement("DIV");
-  const rtRatingClassNode = document.createElement("SPAN");
-  const textNode = document.createTextNode(rottenTomatoesRating[0].Value);
   const ratingNumber = rottenTomatoesRating[0].Value.slice(0, -1);
   
   let rottenStatus = 'fresh';
-
+  
   if(parseInt(ratingNumber) < 60) {
     rottenStatus = 'rotten';
   }
-
-  rtRatingClassNode.classList.add('rating-other-source',`rt-${rottenStatus}-rating`);
-
-  rtRatingNode.appendChild(rtRatingClassNode);
-  rtRatingNode.appendChild(textNode);
+  const rtRatingNode = createNode(rottenTomatoesRating[0].Value, `rt-${rottenStatus}-rating`);
 
   if(differentLayout) {
     rtRatingNode.classList.add('rating-rt-with-imdb');
