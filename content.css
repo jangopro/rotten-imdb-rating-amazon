@@ -1,12 +1,12 @@
 .rt-fresh-rating {
-	background-image: url(chrome-extension://mipckpnmdfipgdjinolfgcdielhnmalg/images/icons8-tomato-48.png);
+	background-image: url(chrome-extension://clnjagndegdlcpifbgjfnkieoapggbcg/images/icons8-tomato-48.png);
 	background-size: cover;
 	height: 18px;
 	width: 21px;
 }
 
 .rt-rotten-rating {
-	background-image: url(chrome-extension://mipckpnmdfipgdjinolfgcdielhnmalg/images/icons8-rotten-tomatoes-48.png);
+	background-image: url(chrome-extension://clnjagndegdlcpifbgjfnkieoapggbcg/images/icons8-rotten-tomatoes-48.png);
 	height: 18px;
 	width: 21px;
 	background-size: cover;
